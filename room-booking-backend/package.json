@@ -1,0 +1,21 @@
+{
+  "name": "campus-room-booking",
+  "version": "1.0.0",
+  "description": "Campus Room Booking System",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "room",
+    "booking",
+    "campus"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.22.2"
+  }
+}
