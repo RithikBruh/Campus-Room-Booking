@@ -3,6 +3,7 @@
     "nodemon": "^3.1.14"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.106.0"
+    "@supabase/supabase-js": "^2.106.1",
+    "cors": "^2.8.6"
   }
 }

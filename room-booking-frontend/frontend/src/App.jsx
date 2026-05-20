@@ -29,11 +29,34 @@ async function getSession() {
   console.log(session?.access_token)
 }
 
+
+async function getMyBookings() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const token = session?.access_token
+
+  const response = await fetch(
+    "http://localhost:3000/my-bookings",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // TODO:cookies
+      },
+    }
+  )
+
+  const data = await response.json()
+
+  console.log(data)
+}
+
+
 function App() {
+  //TODO : supabase.auth.onAuthStateChange()
+  // useEffect(() => {getSession()}, [])
 
-  useEffect(() => {getSession()}, [])
-
-  return <button onClick={Handlelogin}>Login</button>
+  return <><button onClick={Handlelogin}>Login</button><button onClick={getMyBookings}>get bookings</button></> 
 }
 
 export default App
