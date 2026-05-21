@@ -2,15 +2,18 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-export async function createBooking(email, status, venue, timing, reason) {
+export async function createBooking(email, status, venueId, timing, reason) {
     try {
         const newBooking = await prisma.bookings.create({
             data: {
                 email,
                 status,
-                venue,
+                venueId: parseInt(venueId),
                 timing,
                 reason
+            },
+            include: {
+                venue: true
             }
         })
         console.log(`Created new booking with ID ${newBooking.id} for ${email}`)
@@ -21,22 +24,28 @@ export async function createBooking(email, status, venue, timing, reason) {
     }
 }
 
-export async function getBookingById(id) {
-    try {
-        const booking = await prisma.bookings.findUnique({
-            where: { id: parseInt(id) }
-        })
-        return booking
-    } catch (error) {
-        console.error('Error fetching booking:', error)
-        throw error
-    }
-}
+// export async function getBookingById(id) {
+//     try {
+//         const booking = await prisma.bookings.findUnique({
+//             where: { id: parseInt(id) },
+//             include: {
+//                 venue: true
+//             }
+//         })
+//         return booking
+//     } catch (error) {
+//         console.error('Error fetching booking:', error)
+//         throw error
+//     }
+// }
 
 export async function getBookingsByEmail(email) {
     try {
         const bookings = await prisma.bookings.findMany({
-            where: { email }
+            where: { email },
+            include: {
+                venue: true
+            }
         })
         return bookings
     } catch (error) {

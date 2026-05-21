@@ -20,9 +20,19 @@ model bookings {
   id        Int       @id @default(autoincrement())
   email     String
   status    String
-  venue     String
+  venueId   Int
+  venue     venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
   timing    String
   reason    String
   createdAt DateTime  @default(now())
+}
+
+model venue {
+  id        Int       @id @default(autoincrement())
+  venue     String    @unique
+  authUser  String
+  bookings  bookings[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
