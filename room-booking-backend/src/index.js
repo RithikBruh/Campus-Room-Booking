@@ -25,10 +25,17 @@ app.get('/', (req, res) => {
 
 // PROTECTED ROUTES FROM HERE ------ 
 app.use(authMiddleware);
+
 app.get('/my-bookings',(req,res)=>{
 
   res.json({ message: `Hello  ${req.user.email} Role : ${req.user.role}, here are your bookings! ${Object.keys(req.user).length}` });
 })
+
+// TODO: create rooms
+app.post("/book-room",(req,res)=>{
+  
+})
+
 
 // Start server
 app.listen(PORT, () => {
