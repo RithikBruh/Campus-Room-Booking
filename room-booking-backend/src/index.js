@@ -26,7 +26,8 @@ app.get('/', (req, res) => {
 // PROTECTED ROUTES FROM HERE ------ 
 app.use(authMiddleware);
 app.get('/my-bookings',(req,res)=>{
-  res.json({ message: `Hello ${req.user} mail : ${req.user.email}, here are your bookings!` });
+
+  res.json({ message: `Hello  ${req.user.email} Role : ${req.user.role}, here are your bookings! ${Object.keys(req.user).length}` });
 })
 
 // Start server

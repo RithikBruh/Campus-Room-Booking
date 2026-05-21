@@ -2,6 +2,7 @@
 import { createClient } from "@supabase/supabase-js"
 import dotenv from 'dotenv'
 
+import { getRole } from "../models/userroles.model.js"
 // Load .env when present (local development)
 dotenv.config()
 
@@ -39,13 +40,9 @@ export const authMiddleware = async (req, res, next) => {
     //     return res.status(403).json({ message: 'Access denied. Only IITH email users can access this resource.' })
     // }
 
-    
+    const role = await getRole(user.email)
     req.user = user
+    req.user.role = role
     next()
 }
 
-
-async function getRole(email) {
-    
-
-}
