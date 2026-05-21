@@ -9,4 +9,9 @@ dist/
 .idea/
 
 /src/generated/prisma
-/prisma/prisma-client-js
+
+# Prisma client
+.prisma/
+node_modules/.prisma/
+prisma/prisma-client-js/
+
