@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { authMiddleware } from './middleware/auth.middleware.js';
+import venueRoutes from './routes/venue.route.js';
+
 
 const app = express();
 
@@ -23,6 +25,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to Campus Room Booking System');
 });
 
+
+
+
 // PROTECTED ROUTES FROM HERE ------ 
 app.use(authMiddleware);
 
@@ -33,9 +38,10 @@ app.get('/my-bookings',(req,res)=>{
 
 // TODO: create rooms
 app.post("/book-room",(req,res)=>{
-  
+
 })
 
+app.use(venueRoutes);
 
 // Start server
 app.listen(PORT, () => {

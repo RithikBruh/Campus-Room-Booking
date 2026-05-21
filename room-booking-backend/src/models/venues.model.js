@@ -18,33 +18,14 @@ export async function createVenue(venue, authUser) {
     }
 }
 
-export async function getVenueById(id) {
-    try {
-        const venueData = await prisma.venue.findUnique({
-            where: { id: parseInt(id) }
-        })
-        return venueData
-    } catch (error) {
-        console.error('Error fetching venue:', error)
-        throw error
-    }
-}
-
-export async function getVenueByName(venueName) {
-    try {
-        const venueData = await prisma.venue.findUnique({
-            where: { venue: venueName }
-        })
-        return venueData
-    } catch (error) {
-        console.error('Error fetching venue:', error)
-        throw error
-    }
-}
-
 export async function getAllVenues() {
     try {
-        const venues = await prisma.venue.findMany()
+        const venues = await prisma.venue.findMany({
+            select: {
+                id: true,
+                venue: true
+            }
+        })
         return venues
     } catch (error) {
         console.error('Error fetching venues:', error)
@@ -52,27 +33,11 @@ export async function getAllVenues() {
     }
 }
 
-export async function editVenue(id, venue, authUser) {
+export async function deleteVenue(id, authUser) {
     try {
-        const updatedVenue = await prisma.venue.update({
-            where: { id: parseInt(id) },
-            data: {
-                venue,
-                authUser
-            }
-        })
-        console.log(`Updated venue ${id}`)
-        return updatedVenue
-    } catch (error) {
-        console.error('Error updating venue:', error)
-        throw error
-    }
-}
-
-export async function deleteVenue(id) {
-    try {
+        // only the admin who created the venue can delete theirs
         const deletedVenue = await prisma.venue.delete({
-            where: { id: parseInt(id) }
+            where: { id: parseInt(id),authUser }
         })
         console.log(`Deleted venue ${id}`)
         return deletedVenue
@@ -81,3 +46,4 @@ export async function deleteVenue(id) {
         throw error
     }
 }
+
