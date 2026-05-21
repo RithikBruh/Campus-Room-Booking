@@ -2,13 +2,14 @@ import { createVenue, getAllVenues, deleteVenue } from "../models/venues.model.j
 
 export async function createNewVenue(req, res) {
     // only admin@<SNCC/LHC/..etc> can create venues
-    authUser = req.user.role
+    const authUser = req.user.role
+    // console.log("Auth user in createNewVenue:", authUser) // Debug log to check the role of the authenticated user
     if (!authUser.includes("admin")) {
         return res.status(403).json({ error: "Access denied. Only admins can create venues." })
     }
 
     try {
-        const { venue} = req.body
+        const {venue} = req.body
         
         if (!venue) {
             return res.status(400).json({ error: "Missing required fields: venue, authUser" })

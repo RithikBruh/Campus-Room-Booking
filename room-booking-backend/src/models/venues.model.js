@@ -2,15 +2,15 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-export async function createVenue(venue, authUser) {
+export async function createVenue(venue_loc, authUser) {
     try {
         const newVenue = await prisma.venue.create({
             data: {
-                venue,
+                venue: venue_loc,
                 authUser
             }
         })
-        console.log(`Created new venue: ${venue} by ${authUser}`)
+        console.log(`Created new venue: ${venue_loc} by ${authUser}`)
         return newVenue
     } catch (error) {
         console.error('Error creating venue:', error)

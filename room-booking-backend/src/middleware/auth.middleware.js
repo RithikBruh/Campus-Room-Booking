@@ -44,7 +44,8 @@ export const authMiddleware = async (req, res, next) => {
     if (!role) {
         return res.status(403).json({ message: 'Access denied. No role assigned to this user.' })
     }
-    
+
+
     req.user = user
     req.user.role = role
     next()
