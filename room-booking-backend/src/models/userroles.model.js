@@ -8,7 +8,15 @@ export async function getRole(email) {
             where: { email },
             select: { role: true }
         })
-        console.log(`Fetched role for ${email}:`, userRole ? userRole.role : 'No role found')
+        console.log(`Fetched role for ${userRole}:`, userRole ? userRole.role : 'No role found')
+        
+        if (!userRole) {
+            // If no role is found in the database, assign "student" role to IITH email users by default
+            if (email.slice(-11) === "@iith.ac.in") {
+                return "student"
+            }
+        }
+
         return userRole ? userRole.role : null
     } catch (error) {
         console.error('Error fetching user role:', error)
