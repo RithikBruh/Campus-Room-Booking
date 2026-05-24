@@ -2,13 +2,14 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function createBooking(email, venueId, timing, reason) {
+export async function createBooking(email, venueId, date, timing, reason) {
   try {
     const newBooking = await prisma.bookings.create({
       data: {
         email,
         status: "pending", // default status for new bookings
         venueId: parseInt(venueId),
+        date: new Date(date),
         timing,
         reason,
       },

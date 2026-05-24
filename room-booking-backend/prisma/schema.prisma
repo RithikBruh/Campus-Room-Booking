@@ -22,6 +22,7 @@ model bookings {
   status    String
   venueId   Int
   venue     venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  date      DateTime?
   timing    String
   reason    String
   createdAt DateTime  @default(now())

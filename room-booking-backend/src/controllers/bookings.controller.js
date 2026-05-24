@@ -2,14 +2,14 @@ import { createBooking, getBookingsByEmail, updateBookingStatus, deleteBooking, 
 
 export async function BookRoom(req, res) {
     try {
-        const {venueId, timing, reason } = req.body
+        const {venueId, date, timing, reason } = req.body
         const email = req.user.email
 
-        if (!email || !venueId || !timing || !reason) {
-            return res.status(400).json({ error: "Missing required fields: email, venueId, timing, reason" })
+        if (!email || !venueId || !date || !timing || !reason) {
+            return res.status(400).json({ error: "Missing required fields: email, venueId, date, timing, reason" })
         }
         
-        const booking = await createBooking(email, venueId, timing, reason)
+        const booking = await createBooking(email, venueId, date, timing, reason)
         res.status(201).json({ message: "Booking created successfully", booking })
     } catch (error) {
         console.error('Error in BookRoom:', error)

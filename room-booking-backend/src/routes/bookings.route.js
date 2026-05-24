@@ -6,7 +6,7 @@ const router = express.Router()
 // ---------------------- ANY USER --------------
 
 // Create a new booking
-// body: { email, status, venueId, timing, reason }
+// body: { venueId, date, timing, reason }
 router.post('/bookings', BookRoom)
 
 // Get bookings for the authenticated user
