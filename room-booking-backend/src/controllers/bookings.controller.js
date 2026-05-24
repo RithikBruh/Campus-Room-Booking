@@ -4,12 +4,17 @@ export async function BookRoom(req, res) {
     try {
         const {venueId, date, timing, reason } = req.body
         const email = req.user.email
+        const bookingDate = new Date(date)
 
         if (!email || !venueId || !date || !timing || !reason) {
             return res.status(400).json({ error: "Missing required fields: email, venueId, date, timing, reason" })
         }
+
+        if (Number.isNaN(bookingDate.getTime())) {
+            return res.status(400).json({ error: "Invalid date format" })
+        }
         
-        const booking = await createBooking(email, venueId, date, timing, reason)
+        const booking = await createBooking(email, venueId, bookingDate, timing, reason)
         res.status(201).json({ message: "Booking created successfully", booking })
     } catch (error) {
         console.error('Error in BookRoom:', error)

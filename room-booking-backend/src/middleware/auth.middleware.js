@@ -40,6 +40,8 @@ export const authMiddleware = async (req, res, next) => {
     //     return res.status(403).json({ message: 'Access denied. Only IITH email users can access this resource.' })
     // }
 
+    // TODO : cookies later
+    
     const role = await getRole(user.email)
     if (!role) {
         return res.status(403).json({ message: 'Access denied. No role assigned to this user.' })

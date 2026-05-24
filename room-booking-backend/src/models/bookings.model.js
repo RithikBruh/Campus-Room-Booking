@@ -9,7 +9,7 @@ export async function createBooking(email, venueId, date, timing, reason) {
         email,
         status: "pending", // default status for new bookings
         venueId: parseInt(venueId),
-        date: new Date(date),
+        date,
         timing,
         reason,
       },
