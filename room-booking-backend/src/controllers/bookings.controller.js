@@ -1,14 +1,15 @@
-import { createBooking, getBookingsByEmail, updateBookingStatus, deleteBooking } from "../models/bookings.model.js"
+import { createBooking, getBookingsByEmail, updateBookingStatus, deleteBooking, getBookingRequests as getBookingRequestsModel } from "../models/bookings.model.js"
 
 export async function BookRoom(req, res) {
     try {
-        const { email, status, venueId, timing, reason } = req.body
-        
-        if (!email || !status || !venueId || !timing || !reason) {
-            return res.status(400).json({ error: "Missing required fields: email, status, venueId, timing, reason" })
+        const {venueId, timing, reason } = req.body
+        const email = req.user.email
+
+        if (!email || !venueId || !timing || !reason) {
+            return res.status(400).json({ error: "Missing required fields: email, venueId, timing, reason" })
         }
         
-        const booking = await createBooking(email, status, venueId, timing, reason)
+        const booking = await createBooking(email, venueId, timing, reason)
         res.status(201).json({ message: "Booking created successfully", booking })
     } catch (error) {
         console.error('Error in BookRoom:', error)
@@ -32,6 +33,7 @@ export async function BookRoom(req, res) {
 //     }
 // }
 
+
 export async function getUserBookings(req, res) {
     try {
         const email = req.user.email
@@ -43,8 +45,40 @@ export async function getUserBookings(req, res) {
     }
 }
 
-export async function updateBooking(req, res) {
-    role = req.user.role 
+
+
+export async function removeBooking(req, res) {
+    try {
+        const { id } = req.params
+        const email = req.user.email
+
+        const deletedBooking = await deleteBooking(id,email)
+        res.status(200).json({ message: "Booking deleted successfully", deletedBooking })
+    } catch (error) {
+        console.error('Error in removeBooking:', error)
+        res.status(500).json({ error: error.message })
+    }
+}
+
+
+export async function getBookingRequests(req,res){
+    const role = req.user.role 
+    if (!role.includes("admin")) {
+        return res.status(403).json({ error: "Access denied. Only admins can view booking requests." })
+    }
+
+    try {
+        const bookingRequests = await getBookingRequestsModel(role)
+        res.status(200).json(bookingRequests)
+    } catch (error) {
+        console.error('Error in getBookingRequests:', error)
+        res.status(500).json({ error: error.message })
+    }
+
+}
+
+export async function updateBookingRequest(req, res) {
+    const role = req.user.role 
     // role : admin@SNCC , admin@LHC ... etc
     // if role doesnt contain admin 
     if (!role.includes("admin")) {
@@ -59,24 +93,11 @@ export async function updateBooking(req, res) {
         if (!status) {
             return res.status(400).json({ error: "Status field is required" })
         }
-        
-        const updatedBooking = await updateBookingStatus(id, status)
+        // ex : only admin@SNCC can approve/reject bookings for SNCC venues, admin@LHC can approve/reject bookings for LHC venue ... etc
+        const updatedBooking = await updateBookingStatus(id, status,role)
         res.status(200).json({ message: "Booking updated successfully", updatedBooking })
     } catch (error) {
         console.error('Error in updateBooking:', error)
-        res.status(500).json({ error: error.message })
-    }
-}
-
-export async function removeBooking(req, res) {
-    try {
-        const { id } = req.params
-        const email = req.user.email
-
-        const deletedBooking = await deleteBooking(id,email)
-        res.status(200).json({ message: "Booking deleted successfully", deletedBooking })
-    } catch (error) {
-        console.error('Error in removeBooking:', error)
         res.status(500).json({ error: error.message })
     }
 }

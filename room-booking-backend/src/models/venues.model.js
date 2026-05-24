@@ -23,7 +23,8 @@ export async function getAllVenues() {
         const venues = await prisma.venue.findMany({
             select: {
                 id: true,
-                venue: true
+                venue: true,
+                authUser: true
             }
         })
         return venues

@@ -10,7 +10,7 @@ export async function getRole(email) {
         })
   
         if (!userRole) {
-  
+   
             // If no role is found in the database, assign "student" role to IITH email users by default
             if (email.slice(-11) === "@iith.ac.in") {
                 return "student"

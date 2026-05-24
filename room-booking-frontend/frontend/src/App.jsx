@@ -4,6 +4,7 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import supabase from "./supabaseClient";
 import { useEffect } from "react";
+
 async function Handlelogin() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
