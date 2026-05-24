@@ -1,23 +1,28 @@
 "use client";
 
-import {supabase} from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
-async function handleLogin() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
+export default function LoginButton() {
+  const router = useRouter();
+
+  async function handleLogin() {
+  const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
+      redirectTo: "http://localhost:3000/dashboard",
+
       queryParams: {
         access_type: "offline",
         prompt: "consent",
       },
     },
-  });
+  })
 
-  
+  if (error) {
+    console.error(error)
+  }
 }
-
-
-export default function LoginButton() {
   return (
     <button
       className="
