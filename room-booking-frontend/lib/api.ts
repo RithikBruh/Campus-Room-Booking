@@ -95,3 +95,43 @@ export async function deleteBookingFromID(bookingId: number) {
     });
     return response.status;
 }
+
+// --- Applicable for admin dashboard ---
+
+export async function fetchBookingRequests() {
+    const response = await fetch(BackendURL + "/booking-requests", {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        },
+    });
+
+    const status = response.status;
+    
+    const data = await response.json();
+    data.statusCode = status;
+    console.log("Status update response:", data);
+
+    return data;
+}
+
+export async function updateBookingRequestStatus(bookingId: number, newStatus: "approved" | "rejected") {
+    const response = await fetch(BackendURL + "/booking-requests/" + bookingId, {
+        method: "PUT",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            status: newStatus,
+        }),
+    });
+
+    const status = response.status;
+
+    const data = await response.json();
+    data.statusCode = status;
+    console.log("Status update response:", data);
+    return data;
+}

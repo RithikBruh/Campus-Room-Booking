@@ -1,5 +1,5 @@
 "use client" ;
-
+ 
 export default function UserText({ role }: { role: string | undefined }) {
    
     if (role?.toLowerCase() == "student") {

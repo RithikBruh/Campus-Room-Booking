@@ -39,7 +39,9 @@ export default function BookingList({ venues }: { venues: Venue[] }) {
     const venue = venues.find((v) => v.id === venueId);
     return venue ? venue.venue : "Unknown Venue";
   }
-
+  // TODO : sort reverse bookings
+  // TODO :showmore 
+  // TODO : time time1-time2 format
   async function getBookings() {
     const bookings = await fetchBookings();
     // Process the bookings data as needed
