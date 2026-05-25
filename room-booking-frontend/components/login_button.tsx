@@ -3,7 +3,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
-export default function LoginButton() {
+
+export default  function LoginButton() {
   const router = useRouter();
 
   async function handleLogin() {

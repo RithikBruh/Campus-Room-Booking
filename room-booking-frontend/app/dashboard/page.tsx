@@ -73,6 +73,9 @@ export default  function Dashboard() {
               <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
                 3 Active
               </div>
+              <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
+                refresh
+              </div>
             </div>
 
             <div className="mt-8 space-y-5">

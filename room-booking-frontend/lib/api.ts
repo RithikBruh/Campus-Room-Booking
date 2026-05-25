@@ -13,6 +13,7 @@ const token = session?.access_token;
 
 export async function fetchRole() : Promise<string | undefined> {
 
+    console.log("fetching role");
   const response = await fetch(BackendURL + "/me", {
     method: "GET",
 
@@ -39,3 +40,28 @@ export async function fetchVenues()  {
     console.log("Fetched venues:", data);
     return data;
 }
+
+
+export async function submitBookingRequest(venueId: number, reason: string, date: string, time: string) {
+    const response = await fetch(BackendURL + "/bookings", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            venueId,
+            reason,
+            date,
+            timing : time,
+        }),
+    });
+
+    const status = response.status;
+    
+    const data = await response.json();
+    data.statusCode = status;
+
+    return data;
+}
+
