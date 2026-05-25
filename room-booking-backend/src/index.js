@@ -33,7 +33,9 @@ app.get('/', (req, res) => {
 app.use(authMiddleware);
 
 
-
+app.get("/me",(req,res)=>{
+  res.json({role: req.user.role})
+})
 
 app.use(venueRoutes);
 app.use(bookingsRoutes);
