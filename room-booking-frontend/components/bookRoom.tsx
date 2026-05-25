@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchVenues,submitBookingRequest } from "@/lib/api";
+import { submitBookingRequest } from "@/lib/api";
 import { Venue } from "@/app/dashboard/page";
 
 export default function BookRoom({ venues }: { venues: Venue[] }) {
@@ -10,17 +10,31 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
 
   const [reason, setReason] = useState<string>("");
   const [date, setDate] = useState<string>("");
-  const [time, setTime] = useState<string>("");
+  const [time1, setTime1] = useState<string>("");
+  const [time2, setTime2] = useState<string>("");
+
+  function formatTimeTo12Hour(value: string) {
+    if (!value) return "";
+
+    const [hoursString, minutes] = value.split(":");
+    const hours = Number(hoursString);
+    const period = hours >= 12 ? "PM" : "AM";
+    const displayHours = hours % 12 || 12;
+
+    return `${displayHours}:${minutes} ${period}`;
+  }
 
   function HandleNewRequest() {
     setReason("");
     setDate("");
-    setTime("");
+    setTime1("");
+    setTime2("");
   }
 
   async function handleSubmit() {
     console.log("Submitting booking request with details:");
-    const data = await submitBookingRequest(selectedvenueId, reason, date, time);
+    const timing = `${formatTimeTo12Hour(time1)}-${formatTimeTo12Hour(time2)}`;
+    const data = await submitBookingRequest(selectedvenueId, reason, date, timing);
     console.log(data);
     if (data.statusCode == 201) {
         alert("Booking request submitted successfully!");
@@ -93,15 +107,28 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
           </div>
 
           {/* Time */}
-          <div>
+          <div className="md:col-span-2">
             <label className="mb-2 block text-sm text-zinc-300">Time</label>
 
-            <input
-              type="time"
-              onChange={(e) => setTime(e.target.value)}
-              value={time}
-              className="w-full rounded-2xl border border-white/10 bg-[#0b1220] px-5 py-4 outline-none transition focus:border-cyan-500"
-            />
+            <div className="flex items-center gap-3">
+              <input
+                type="time"
+                onChange={(e) => setTime1(e.target.value)}
+                value={time1}
+                aria-label="Time 1"
+                className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-[#0b1220] px-4 py-3 text-sm outline-none transition focus:border-cyan-500"
+              />
+
+              <div className="shrink-0 text-sm font-medium text-zinc-500">-</div>
+
+              <input
+                type="time"
+                onChange={(e) => setTime2(e.target.value)}
+                value={time2}
+                aria-label="Time 2"
+                className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-[#0b1220] px-4 py-3 text-sm outline-none transition focus:border-cyan-500"
+              />
+            </div>
           </div>
 
           {/* Reason */}
