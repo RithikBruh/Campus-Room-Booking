@@ -34,6 +34,18 @@ export async function listAllVenues(req, res) {
     }
 }
 
+export async function listUserVenues(req, res) {
+    // every auth user can see the venues created by them
+    try {
+        const user = req.user.role
+        const venues = await getAllVenues(user)
+        res.status(200).json(venues)
+    } catch (error) {
+        console.error('Error in listUserVenues:', error)
+        res.status(500).json({ error: error.message })
+    }
+}
+
 export async function deleteVenueHandler(req, res) {
     if (!req.user.role.includes("admin")) { 
         return res.status(403).json({ error: "Access denied. Only admins can delete venues." })

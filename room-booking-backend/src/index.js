@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 // PROTECTED ROUTES FROM HERE ------ 
 app.use(authMiddleware);
 
-
+// TODO : better admin middleware later
 app.get("/me",(req,res)=>{
   console.log('ok ',req.user.role)
   res.json({role: req.user.role})

@@ -18,8 +18,23 @@ export async function createVenue(venue_loc, authUser) {
     }
 }
 
-export async function getAllVenues() {
+export async function getAllVenues(user = null) {
+    // if user is provided, return only the venues created by that user, else return all venues
     try {
+        if (user) {
+            const venues = await prisma.venue.findMany({
+                where: {
+                    authUser: user
+                },
+                select: {
+                    id: true,
+                    venue: true,
+                    authUser: true
+                }
+            })
+            return venues
+        }
+
         const venues = await prisma.venue.findMany({
             select: {
                 id: true,
