@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Enable CORS for local development (allow the frontend dev server)
-app.use(cors({ origin: 'http://localhost:5173'
+app.use(cors({ origin: 'http://localhost:3001'
   // TODO: add cookies 
  }));
 
@@ -34,6 +34,7 @@ app.use(authMiddleware);
 
 
 app.get("/me",(req,res)=>{
+  console.log('ok ',req.user.role)
   res.json({role: req.user.role})
 })
 

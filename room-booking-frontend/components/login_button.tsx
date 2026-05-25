@@ -7,10 +7,11 @@ export default function LoginButton() {
   const router = useRouter();
 
   async function handleLogin() {
+    const FrontendURL : string = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3001";
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/dashboard",
+      redirectTo: FrontendURL + "/dashboard",
 
       queryParams: {
         access_type: "offline",
@@ -22,6 +23,8 @@ export default function LoginButton() {
   if (error) {
     console.error(error)
   }
+//   console.log("printing local storage")
+//   console.log(localStorage);
 }
   return (
     <button
