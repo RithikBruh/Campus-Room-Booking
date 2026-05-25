@@ -1,19 +1,7 @@
 "use client" ;
 
-import {fetchRole} from "@/lib/api";
-import { useEffect, useState } from "react";
-
-export default function UserText() {
-    const [role ,setRole] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-     async function getRole() {
-        const role = await fetchRole();
-        setRole(role);
-      }
-      getRole();
-    }, []);
-
+export default function UserText({ role }: { role: string | undefined }) {
+   
     if (role?.toLowerCase() == "student") {
     return (<span className="text-sm text-green-500"> Student User </span>)
     }

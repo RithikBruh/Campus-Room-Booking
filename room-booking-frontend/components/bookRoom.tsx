@@ -2,15 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { fetchVenues,submitBookingRequest } from "@/lib/api";
+import { Venue } from "@/app/dashboard/page";
 
-type Venue = {
-  id: number;
-  venue: string;
-  authUser: string;
-};
-
-export default function BookRoom() {
-  const [venues, setVenues] = useState<Venue[]>([]);
+export default function BookRoom({ venues }: { venues: Venue[] }) {
+  
   const [selectedvenueId, setSelectedvenueId] = useState<number>(0);
 
   const [reason, setReason] = useState<string>("");
@@ -22,11 +17,6 @@ export default function BookRoom() {
     setDate("");
     setTime("");
   }
-  useEffect(() => {
-    fetchVenues().then((venues) => {
-      setVenues(venues);
-    });
-  }, []);
 
   async function handleSubmit() {
     console.log("Submitting booking request with details:");

@@ -1,12 +1,38 @@
 
-
+"use client" ;
 import Image from "next/image";
 
 import UserText from "@/components/userText";
 import BookRoom from "@/components/bookRoom";
+import BookingList from "@/components/bookingList";
+
+import {fetchRole,fetchVenues} from "@/lib/api";
+import { useEffect, useState } from "react";
+
+export type Venue = {
+  id: number;
+  venue: string;
+  authUser: string;
+};
 
 export default  function Dashboard() {
 
+    const [role ,setRole] = useState<string | undefined>(undefined);
+    const [venues, setVenues] = useState<Venue[]>([]);
+
+    useEffect(() => {
+        async function getRole() {
+              const role = await fetchRole();
+                setRole(role);
+        }
+        getRole();
+
+        async function getVenues() {
+            const venues = await fetchVenues();
+            setVenues(venues);
+        }
+        getVenues();
+    }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030712] text-white">
@@ -45,7 +71,7 @@ export default  function Dashboard() {
                 Logged in as
               </p>
 
-              <UserText />
+              <UserText role = {role}/>
             </div>
           </div>
         </div>
@@ -53,113 +79,10 @@ export default  function Dashboard() {
         {/* Main Grid */}
         <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           
-          <BookRoom />
+          <BookRoom venues={venues} />
 
           {/* Booking List */}
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-2xl">
-            
-            <div className="flex items-center justify-between">
-              
-              <div>
-                <h2 className="text-3xl font-bold">
-                  Your Bookings
-                </h2>
-
-                <p className="mt-2 text-sm text-zinc-400">
-                  Recently submitted room requests.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
-                3 Active
-              </div>
-              <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
-                refresh
-              </div>
-            </div>
-
-            <div className="mt-8 space-y-5">
-              
-              {/* Card */}
-              <div className="group rounded-3xl border border-white/10 bg-[#0b1220]/90 p-5 transition-all hover:border-cyan-500/30 hover:bg-[#10192b]">
-                
-                <div className="flex items-start justify-between">
-                  
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-cyan-500/10 p-3 text-lg">
-                        🏫
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          Seminar Hall A
-                        </h3>
-
-                        <p className="text-sm text-zinc-500">
-                          Club Meeting
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-5 flex gap-3 text-sm text-zinc-400">
-                      <div className="rounded-xl bg-white/5 px-3 py-2">
-                        📅 26 May
-                      </div>
-
-                      <div className="rounded-xl bg-white/5 px-3 py-2">
-                        ⏰ 2:00 PM
-                      </div>
-                    </div>
-                  </div>
-
-                  <button className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20">
-                    Delete
-                  </button>
-                </div>
-              </div>
-
-              {/* Card */}
-              <div className="group rounded-3xl border border-white/10 bg-[#0b1220]/90 p-5 transition-all hover:border-purple-500/30 hover:bg-[#10192b]">
-                
-                <div className="flex items-start justify-between">
-                  
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-purple-500/10 p-3 text-lg">
-                        💻
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          AI Lab
-                        </h3>
-
-                        <p className="text-sm text-zinc-500">
-                          Workshop Session
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-5 flex gap-3 text-sm text-zinc-400">
-                      <div className="rounded-xl bg-white/5 px-3 py-2">
-                        📅 28 May
-                      </div>
-
-                      <div className="rounded-xl bg-white/5 px-3 py-2">
-                        ⏰ 11:00 AM
-                      </div>
-                    </div>
-                  </div>
-
-                  <button className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/20">
-                    Delete
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
+         <BookingList venues={venues}/>
         </div>
       </div>
     </div>
