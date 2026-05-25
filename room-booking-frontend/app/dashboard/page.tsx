@@ -6,6 +6,7 @@ import UserText from "@/components/userText";
 import BookRoom from "@/components/bookRoom";
 import BookingList from "@/components/bookingList";
 import BookingRequests from "@/components/bookingRequests";
+import YourVenues from "@/components/venueList";
 
 import {fetchRole,fetchVenues} from "@/lib/api";
 import { useEffect, useState } from "react";
@@ -80,6 +81,7 @@ export default  function Dashboard() {
         {/* Main Grid */}
         <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <BookingRequests role={role} />
+          <YourVenues role={role} />
           <BookRoom venues={venues} />
 
           {/* Booking List */}

@@ -135,3 +135,52 @@ export async function updateBookingRequestStatus(bookingId: number, newStatus: "
     console.log("Status update response:", data);
     return data;
 }
+
+
+export async function fetchYourVenues() {
+    const response = await fetch(BackendURL + "/my-venues", {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        },
+    }); 
+    const status = response.status;
+    
+    const data = await response.json();
+    data.statusCode = status;
+    console.log("Status update response:", data);
+    
+    return data;
+}
+
+export async function addVenue(venueName: string) {
+    const response = await fetch(BackendURL + "/venues", {
+        method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            venue: venueName,
+        }),
+    });
+
+    const status = response.status;
+
+    const data = await response.json();
+    data.statusCode = status;
+    console.log("Add venue response:", data);
+    return data;
+}
+
+export async function deleteVenue(venueId: number) {
+    const response = await fetch(BackendURL + "/venues/" + venueId, {
+        method: "DELETE",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        },
+    });
+    return response.status;
+}
