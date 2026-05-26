@@ -1,6 +1,7 @@
 
 "use client" ;
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import UserText from "@/components/userText";
 import BookRoom from "@/components/bookRoom";
@@ -9,6 +10,7 @@ import BookingRequests from "@/components/bookingRequests";
 import YourVenues from "@/components/venueList";
 
 import {fetchRole,fetchVenues} from "@/lib/api";
+import { supabase } from "@/lib/supabaseClient";
 import { useEffect, useState } from "react";
 
 export type Venue = {
@@ -18,6 +20,7 @@ export type Venue = {
 };
 
 export default  function Dashboard() {
+  const router = useRouter();
 
     const [role ,setRole] = useState<string | undefined>(undefined);
     const [venues, setVenues] = useState<Venue[]>([]);
@@ -35,6 +38,12 @@ export default  function Dashboard() {
         }
         getVenues();
     }, []);
+
+    async function handleLogout() {
+      await supabase.auth.signOut();
+      localStorage.clear();
+      router.replace("/");
+    }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030712] text-white">
@@ -68,12 +77,22 @@ export default  function Dashboard() {
             <Image src="/iithlogo.png" alt="Logo" width={50} height={50} />
             
 
-            <div className="rounded-2xl border border-white/10 bg-black/30 px-5 py-3">
-              <p className="text-xs text-zinc-500">
-                Logged in as
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="rounded-2xl border border-white/10 bg-black/30 px-5 py-3">
+                <p className="text-xs text-zinc-500">
+                  Logged in as
+                </p>
 
-              <UserText role = {role}/>
+                <UserText role = {role}/>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-zinc-200 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-white"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
