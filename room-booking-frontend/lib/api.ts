@@ -36,8 +36,13 @@ export async function fetchVenues() {
   });
 
   const data = await response.json();
+  data.statusCode = response.status;
   console.log("Fetched venues:", data);
-  return data;
+  if (data.statusCode >= 200 && data.statusCode < 300) {
+    return data;
+  }
+
+  return [];
 }
 
 export async function submitBookingRequest(
@@ -77,12 +82,14 @@ export async function fetchBookings() {
     },
   });
 
-  const status = response.status;
 
-  const data = await response.json();
-  data.statusCode = status;
-  console.log(data);
-  return data;
+    const data = await response.json();
+    data.statusCode = response.status;
+    console.log("Status update response:", data);
+    if (data.statusCode >= 200 && data.statusCode < 300) {
+      return data ;
+    }
+    return [];
 }
 
 export async function deleteBookingFromID(bookingId: number) {
@@ -107,13 +114,14 @@ export async function fetchBookingRequests() {
         },
     });
 
-    const status = response.status;
-    
-    const data = await response.json();
-    data.statusCode = status;
-    console.log("Status update response:", data);
 
-    return data;
+    const data = await response.json();
+    data.statusCode = response.status;
+    console.log("Status update response:", data);
+    if (data.statusCode >= 200 && data.statusCode < 300) {
+      return data ;
+    }
+    return [];
 }
 
 export async function updateBookingRequestStatus(bookingId: number, newStatus: "approved" | "rejected") {

@@ -28,6 +28,10 @@ export default  function Dashboard() {
     useEffect(() => {
         async function getRole() {
               const role = await fetchRole();
+              if (!role) {
+                router.replace("/unauthorized");
+                return;
+              }
                 setRole(role);
         }
         getRole();
