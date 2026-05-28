@@ -10,7 +10,7 @@ type VenueItem = {
 };
 
 export default function YourVenues({ role }: { role: string | undefined }) {
-  if (!role?.toLowerCase().includes("admin")) {
+  if (!role?.toLowerCase().includes("admin@")) {
     return null;
   }
 
@@ -24,8 +24,7 @@ function YourVenuesAdmin() {
 
   async function getVenues() {
     const data = await fetchYourVenues();
-    const items = data?.venues ?? data ?? [];
-    setVenues(items);
+    setVenues(data);
   }
 
   useEffect(() => {

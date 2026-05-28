@@ -1,5 +1,5 @@
 import express from 'express'
-import { BookRoom, getUserBookings, removeBooking ,getBookingRequests,updateBookingRequest} from '../controllers/bookings.controller.js'
+import { BookRoom, getUserBookings, removeBooking} from '../controllers/bookings.controller.js'
 
 const router = express.Router()
 
@@ -14,14 +14,6 @@ router.get('/bookings', getUserBookings)
 
 // Delete a booking
 router.delete('/bookings/:id', removeBooking)
-
-// ---------------------- ADMIN USER --------------
-
-// Update booking status (admin only)
-// body: {id ,  status: "pending" | "approved" | "rejected" }
-router.put('/booking-requests/:id', updateBookingRequest)
-
-router.get('/booking-requests', getBookingRequests)
 
 // --------------------------------------
 

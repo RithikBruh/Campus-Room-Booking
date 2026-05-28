@@ -10,6 +10,7 @@ const BackendURL: string =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
 const token = session?.access_token;
+// console.log(token);
 
 export async function fetchRole(): Promise<string | undefined> {
   console.log("fetching role");
@@ -22,6 +23,7 @@ export async function fetchRole(): Promise<string | undefined> {
     },
   });
 
+  // TODO : handle error responses
   const data = await response.json();
   return data.role;
 }
@@ -38,6 +40,7 @@ export async function fetchVenues() {
   const data = await response.json();
   data.statusCode = response.status;
   console.log("Fetched venues:", data);
+
   if (data.statusCode >= 200 && data.statusCode < 300) {
     return data;
   }
@@ -153,13 +156,14 @@ export async function fetchYourVenues() {
         "Content-Type": "application/json",
         },
     }); 
-    const status = response.status;
     
     const data = await response.json();
-    data.statusCode = status;
-    console.log("Status update response:", data);
+    data.statusCode = response.status;
     
-    return data;
+    if (data.statusCode >= 200 && data.statusCode < 300) {
+      return data;
+    }
+    return [];
 }
 
 export async function addVenue(venueName: string) {

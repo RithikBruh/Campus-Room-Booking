@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import { authMiddleware } from './middleware/auth.middleware.js';
+import {adminMiddleware} from './middleware/admin.middleware.js'
+
+import adminVenueRoutes from './routes/admin.venue.routes.js';
 import venueRoutes from './routes/venue.route.js';
 import bookingsRoutes from './routes/bookings.route.js';
-
+import adminBookingRequestRoutes from './routes/admin.booking.route.js';
 
 const app = express();
 
@@ -29,17 +32,20 @@ app.get('/', (req, res) => {
 
 
 
-// PROTECTED ROUTES FROM HERE ------ 
-app.use(authMiddleware);
+// PROTECT THE  ROUTES FROM HERE ------ 
 
 // TODO : better admin middleware later
-app.get("/me",(req,res)=>{
-  console.log('ok ',req.user.role)
+app.get("/me",authMiddleware,(req,res)=>{
   res.json({role: req.user.role})
 })
 
-app.use(venueRoutes);
-app.use(bookingsRoutes);
+app.use(authMiddleware,venueRoutes);
+
+app.use(authMiddleware,bookingsRoutes);
+
+// ADMIN PROTECTED ROUTES ------
+app.use(adminMiddleware,adminVenueRoutes);
+app.use(adminMiddleware,adminBookingRequestRoutes);
 
 // Start server
 app.listen(PORT, () => {
