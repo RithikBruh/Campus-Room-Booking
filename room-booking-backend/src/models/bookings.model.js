@@ -4,6 +4,22 @@ const prisma = new PrismaClient();
 
 export async function createBooking(email, venueId, date, timing, reason) {
   try {
+    // Check if an identical booking already exists (same email, venue, date and timing)
+    const existingBooking = await prisma.bookings.findFirst({
+      where: {
+        email,
+        venueId: parseInt(venueId),
+        date,
+        timing,
+      },
+      include: { venue: true },
+    });
+
+    if (existingBooking) {
+      console.log(`Booking already exists for ${email} at venue ${venueId} on ${date}`);
+      return { alreadyExists: true, booking: existingBooking };
+    }
+
     const newBooking = await prisma.bookings.create({
       data: {
         email,

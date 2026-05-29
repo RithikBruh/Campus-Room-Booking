@@ -31,7 +31,6 @@ export const adminMiddleware = async (req, res, next) => {
     // TODO : cookies later
     
     const role = await getRole(user.email)
-    console.log(role.slice(0,6)) // Debug log to check the role of the authenticated user
     if (role.slice(0,6) !== "admin@") {
         return res.status(403).json({ message: 'Access denied. No role assigned to this user.' })
     }

@@ -40,7 +40,11 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
         alert("Booking request submitted successfully!");
     }
     else {
+      if (data.statusCode == 409) {
+        alert("Booking conflict: Duplicate booking exists for the selected venue, date, and time.");
+      } else {
         alert("Failed to submit booking request.");
+      }
     }
   }
   return (

@@ -14,8 +14,13 @@ export async function BookRoom(req, res) {
             return res.status(400).json({ error: "Invalid date format" })
         }
         
-        const booking = await createBooking(email, venueId, bookingDate, timing, reason)
-        res.status(201).json({ message: "Booking created successfully", booking })
+        const bookingResult = await createBooking(email, venueId, bookingDate, timing, reason)
+
+        if (bookingResult && bookingResult.alreadyExists) {
+            return res.status(409).json({ message: "already exists", booking: bookingResult.booking })
+        }
+
+        res.status(201).json({ message: "Booking created successfully", booking: bookingResult })
     } catch (error) {
         console.error('Error in BookRoom:', error)
         res.status(500).json({ error: error.message })
