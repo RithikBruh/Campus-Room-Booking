@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { submitBookingRequest } from "@/lib/api";
 import { Venue } from "@/app/dashboard/page";
-
+import formatTime24To12 from "@/lib/timeFormat";
 export default function BookRoom({ venues }: { venues: Venue[] }) {
   
   const [selectedvenueId, setSelectedvenueId] = useState<number>(0);
@@ -13,16 +13,7 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
   const [time1, setTime1] = useState<string>("");
   const [time2, setTime2] = useState<string>("");
 
-  function formatTimeTo12Hour(value: string) {
-    if (!value) return "";
-
-    const [hoursString, minutes] = value.split(":");
-    const hours = Number(hoursString);
-    const period = hours >= 12 ? "PM" : "AM";
-    const displayHours = hours % 12 || 12;
-
-    return `${displayHours}:${minutes} ${period}`;
-  }
+  
 
   function HandleNewRequest() {
     setReason("");
@@ -33,15 +24,16 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
 
   async function handleSubmit() {
     console.log("Submitting booking request with details:");
-    const timing = `${formatTimeTo12Hour(time1)}-${formatTimeTo12Hour(time2)}`;
-    const data = await submitBookingRequest(selectedvenueId, reason, date, timing);
+
+    const data = await submitBookingRequest(selectedvenueId, reason, date, time1, time2);
     console.log(data);
     if (data.statusCode == 201) {
         alert("Booking request submitted successfully!");
     }
     else {
       if (data.statusCode == 409) {
-        alert("Booking conflict: Duplicate booking exists for the selected venue, date, and time.");
+        // Booking clash error, show specific message from backend
+        alert(`${data.message}  from ${formatTime24To12(data.startTime)} to ${formatTime24To12(data.endTime)} on ${data.date}`);
       } else {
         alert("Failed to submit booking request.");
       }

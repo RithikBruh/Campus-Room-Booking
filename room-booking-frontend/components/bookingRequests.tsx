@@ -7,6 +7,7 @@ import {
 } from "@/lib/api";
 import { Venue } from "@/app/dashboard/page";
 import formatDate from "@/lib/dateFormat";
+import formatTime24To12 from "@/lib/timeFormat";
 
 type BookingRequest = {
   id: number;
@@ -15,7 +16,8 @@ type BookingRequest = {
   venue: Venue;
   reason: string;
   date: string;
-  timing: string;
+  startTime: string;
+  endTime: string;
   status: "pending" | "approved" | "rejected";
   statusCode : number;
 };
@@ -128,7 +130,7 @@ function RequestCard({
           <div className="mt-3 space-y-1 text-sm text-zinc-400">
             <p>👤 {request.email ?? "Unknown user"}</p>
             <p>📅 {formatDate(request.date)}</p>
-            <p>⏰ {request.timing}</p>
+            <p>⏰ {formatTime24To12(request.startTime)} - {formatTime24To12(request.endTime)}</p>
             <p>📝 {request.reason}</p>
           </div>
         </div>

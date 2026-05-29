@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchBookings, deleteBookingFromID } from "@/lib/api";
 import { Venue } from "@/app/dashboard/page";
 import formatDate from "@/lib/dateFormat";
+import formatTime24To12 from "@/lib/timeFormat";
 
 type Booking = {
   id: number;
@@ -11,7 +12,8 @@ type Booking = {
   venueId: number;
   reason: string;
   date: string;
-  timing: string;
+  startTime: string;
+  endTime: string;
   status: "pending" | "approved" | "rejected";
 };
 
@@ -80,7 +82,8 @@ export default function BookingList({ venues }: { venues: Venue[] }) {
             status={booking.status}
             venueName={getVenueName(booking.venueId)}
             date={booking.date}
-            time={booking.timing}
+            startTime={booking.startTime}
+            endTime={booking.endTime}
             reason={booking.reason}
             onDelete={handleDelete}
           />
@@ -95,12 +98,13 @@ type Props = {
   status: "pending" | "approved" | "rejected";
   venueName: string;
   date: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   reason: string;
   onDelete: (id: number) => Promise<void> | void;
 };
 
-function Card({ id, status, venueName, date, time, reason, onDelete }: Props) {
+function Card({ id, status, venueName, date, startTime, endTime, reason, onDelete }: Props) {
   const statusStyles = {
     pending: "border-yellow-500/20 bg-yellow-500/10 text-yellow-300",
 
@@ -136,7 +140,7 @@ function Card({ id, status, venueName, date, time, reason, onDelete }: Props) {
               📅 {formatDate(date)}
             </div>
 
-            <div className="rounded-xl bg-white/5 px-3 py-2">⏰ {time}</div>
+            <div className="rounded-xl bg-white/5 px-3 py-2">⏰ {formatTime24To12(startTime)} - {formatTime24To12(endTime)}</div>
           </div>
         </div>
 

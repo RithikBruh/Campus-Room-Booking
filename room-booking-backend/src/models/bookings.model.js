@@ -2,18 +2,33 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function createBooking(email, venueId, date, timing, reason) {
+export async function checkBookingAvailability(email, venueId, date, givenstartTime, givenendTime) {
   try {
-    // Check if an identical booking already exists (same email, venue, date and timing)
-    const existingBooking = await prisma.bookings.findFirst({
+    return await prisma.bookings.findFirst({
       where: {
         email,
         venueId: parseInt(venueId),
         date,
-        timing,
+        startTime : {
+          lt: givenendTime
+        },
+        endTime: {
+          gt: givenstartTime,
+        },
+        status : "approved" 
       },
       include: { venue: true },
     });
+  } catch (error) {
+    console.error("Error checking booking availability:", error);
+    throw error;
+  }
+}
+
+export async function createBooking(email, venueId, date, startTime, endTime, reason) {
+  try {
+    // Check if an  booking clash exists (same email, venue, date and time range)
+    const existingBooking = await checkBookingAvailability(email, venueId, date, startTime, endTime);
 
     if (existingBooking) {
       console.log(`Booking already exists for ${email} at venue ${venueId} on ${date}`);
@@ -26,7 +41,8 @@ export async function createBooking(email, venueId, date, timing, reason) {
         status: "pending", // default status for new bookings
         venueId: parseInt(venueId),
         date,
-        timing,
+        startTime,
+        endTime,
         reason,
       },
       include: {

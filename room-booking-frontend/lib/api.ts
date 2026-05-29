@@ -52,7 +52,8 @@ export async function submitBookingRequest(
   venueId: number,
   reason: string,
   date: string,
-  time: string,
+  startTime: string,
+  endTime: string
 ) {
   const response = await fetch(BackendURL + "/bookings", {
     method: "POST",
@@ -64,12 +65,13 @@ export async function submitBookingRequest(
       venueId,
       reason,
       date,
-      timing: time,
+      startTime,
+      endTime
     }),
   });
 
   const status = response.status;
-
+  // error is handled in bookRoom.tsx based on status code
   const data = await response.json();
   data.statusCode = status;
 
