@@ -4,7 +4,7 @@ const {
   data: { session },
 } = await supabase.auth.getSession();
 
-  console.log(session?.access_token);
+  // console.log(session?.access_token);
 
 const BackendURL: string =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";

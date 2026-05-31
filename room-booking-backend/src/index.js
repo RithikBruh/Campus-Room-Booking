@@ -7,6 +7,7 @@ import adminVenueRoutes from './routes/admin.venue.routes.js';
 import venueRoutes from './routes/venue.route.js';
 import bookingsRoutes from './routes/bookings.route.js';
 import adminBookingRequestRoutes from './routes/admin.booking.route.js';
+import { PROXY_FILENAME } from 'next/dist/lib/constants.js';
 
 const app = express();
 
@@ -19,10 +20,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
+
 // Enable CORS for local development (allow the frontend dev server)
-app.use(cors({ origin: 'http://localhost:3001'
-  // TODO: add cookies 
- }));
+// app.use(cors({ origin: 'http://localhost:3001'
+//   // TODO: add cookies 
+//  }));
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3001",
+      process.env.FRONTEND_URL || "http://localhost:3000",
+    ],
+    credentials: true, //cookies later
+  })
+);
 
 // Routes
 app.get('/', (req, res) => {
