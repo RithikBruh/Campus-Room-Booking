@@ -7,7 +7,6 @@ import adminVenueRoutes from './routes/admin.venue.routes.js';
 import venueRoutes from './routes/venue.route.js';
 import bookingsRoutes from './routes/bookings.route.js';
 import adminBookingRequestRoutes from './routes/admin.booking.route.js';
-import { PROXY_FILENAME } from 'next/dist/lib/constants.js';
 
 const app = express();
 
