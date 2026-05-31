@@ -25,19 +25,19 @@ export default function BookRoom({ venues }: { venues: Venue[] }) {
   async function handleSubmit() {
     console.log("Submitting booking request with details:");
 
+    try {
     const data = await submitBookingRequest(selectedvenueId, reason, date, time1, time2);
-    console.log(data);
-    if (data.statusCode == 201) {
-        alert("Booking request submitted successfully!");
+      alert("Booking request submitted successfully.");
     }
-    else {
-      if (data.statusCode == 409) {
+    catch (error : any) {
+      if (error.status == 409) {
         // Booking clash error, show specific message from backend
-        alert(`${data.message}  from ${formatTime24To12(data.startTime)} to ${formatTime24To12(data.endTime)} on ${data.date}`);
+        alert(`${error.data.message}  from ${formatTime24To12(error.data.startTime)} to ${formatTime24To12(error.data.endTime)} on the date you selected.`);
       } else {
         alert("Failed to submit booking request.");
       }
     }
+
   }
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-2xl">

@@ -3,10 +3,6 @@ import { createVenue, getAllVenues, deleteVenue } from "../models/venues.model.j
 export async function createNewVenue(req, res) {
     // only admin@<SNCC/LHC/..etc> can create venues
     const authUser = req.user.role
-    
-    if (authUser.slice(6) !== "admin@") {
-        return res.status(403).json({ error: "Access denied. Only admins can create venues." })
-    }
 
     try {
         const {venue} = req.body
@@ -47,9 +43,6 @@ export async function listUserVenues(req, res) {
 }
 
 export async function deleteVenueHandler(req, res) {
-    if (req.user.role.slice(6) !== "admin@") { 
-        return res.status(403).json({ error: "Access denied. Only admins can delete venues." })
-    }
 
     try {
         const { id } = req.params

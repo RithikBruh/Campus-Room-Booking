@@ -18,7 +18,6 @@ export default function YourVenues({ role }: { role: string | undefined }) {
 }
 
 function YourVenuesAdmin() {
-
   const [venues, setVenues] = useState<VenueItem[]>([]);
   const [venueName, setVenueName] = useState<string>("");
 
@@ -38,12 +37,12 @@ function YourVenuesAdmin() {
       return;
     }
 
-    const result = await addVenue(trimmedName);
-    if (result?.statusCode >= 200 && result?.statusCode < 300) {
+    try {
+      await addVenue(trimmedName);
       alert("Venue added successfully.");
       setVenueName("");
-      await getVenues();
-    } else {
+      await getVenues(); // updating venue list
+    } catch (error) {
       alert("Failed to add venue.");
     }
   }
@@ -52,11 +51,12 @@ function YourVenuesAdmin() {
     const confirmDelete = window.confirm("Delete this venue?");
     if (!confirmDelete) return;
 
-    const statusCode = await deleteVenue(venueId);
-    if (statusCode === 200) {
+    try {
+      const statusCode = await deleteVenue(venueId);
       alert("Venue deleted successfully.");
-      await getVenues();
-    } else {
+
+    }  
+    catch (error) {
       alert("Failed to delete venue.");
     }
   }
@@ -138,8 +138,6 @@ function YourVenuesAdmin() {
           <p className="text-sm text-zinc-500">No venues found.</p>
         ) : null}
       </div>
-
-
     </div>
   );
 }

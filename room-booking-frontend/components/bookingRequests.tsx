@@ -27,8 +27,7 @@ export default function BookingRequests({ role }: { role: string | undefined }) 
 
   async function getRequests() {
     const data = await fetchBookingRequests();
-    const items = data?.requests ?? data?.bookings ?? data ?? [];
-    setRequests(items);
+    setRequests(data);
   }
 
   useEffect(() => {
@@ -42,13 +41,15 @@ export default function BookingRequests({ role }: { role: string | undefined }) 
     bookingId: number,
     newStatus: "approved" | "rejected",
   ) {
-    alert(`You are about to ${newStatus} this booking request. Proceed?`);
+    const confirmed = window.confirm(`You are about to ${newStatus} this booking request. Proceed?`);
+    if (!confirmed) return;
+    try {
     const result = await updateBookingRequestStatus(bookingId, newStatus);
-    if (result?.statusCode >= 200 && result?.statusCode < 300) {
-      alert(`Booking request ${newStatus}.`);
-      await getRequests();
-    } else {
-      alert(`Failed to ${newStatus} booking request.`);
+    alert("Booking request status updated successfully.");
+    await getRequests(); // Refresh the list after updating status
+    }
+    catch (error) {
+      alert("Error updating booking request status." + JSON.stringify(error));
     }
   }
 

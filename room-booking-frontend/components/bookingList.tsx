@@ -27,14 +27,13 @@ export default function BookingList({ venues }: { venues: Venue[] }) {
     );
     if (!confirmDelete) return;
 
+    try {
     const statusCode = await deleteBookingFromID(bookingId);
-    if (statusCode === 200) {
-      alert("Booking deleted successfully!");
-      // refresh the list after successful deletion
-      await getBookings();
-    } else {
-      alert("Failed to delete booking.");
-    }
+      alert("Booking deleted successfully.");
+  }
+  catch (error) {
+    alert("Error deleting Booking." + JSON.stringify(error));
+  }
   }
 
   function getVenueName(venueId: number) {

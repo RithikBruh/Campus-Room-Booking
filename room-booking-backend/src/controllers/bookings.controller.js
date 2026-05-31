@@ -6,6 +6,8 @@ import {
   getBookingRequests as getBookingRequestsModel,
 } from "../models/bookings.model.js";
 
+import sendEmail from "../lib/resend.js";
+
 export async function BookRoom(req, res) {
   try {
     const { venueId, date, startTime, endTime, reason } = req.body;
@@ -135,6 +137,7 @@ export async function updateBookingRequest(req, res) {
     }
     // ex : only admin@SNCC can approve/reject bookings for SNCC venues, admin@LHC can approve/reject bookings for LHC venue ... etc
     const updatedBooking = await updateBookingStatus(id, status, role);
+    await sendEmail(updatedBooking);
     res
       .status(200)
       .json({ message: "Booking updated successfully", updatedBooking });

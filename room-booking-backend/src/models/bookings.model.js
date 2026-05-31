@@ -101,6 +101,7 @@ export async function updateBookingStatus(id, status, role) {
       data: { status },
     });
     console.log(`Updated booking ${id} status to ${status}`);
+    
     return updatedBooking;
   } catch (error) {
     console.error("Error updating booking:", error);

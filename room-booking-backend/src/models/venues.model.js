@@ -49,6 +49,25 @@ export async function getAllVenues(user = null) {
     }
 }
 
+export async function getVenueById(id) {
+    try {
+        const venue = await prisma.venue.findUnique({
+            where: {
+                id: parseInt(id)
+            },
+            select: {
+                id: true,
+                venue: true,
+                authUser: true
+            }
+        })
+        return venue
+    } catch (error) {
+        console.error('Error fetching venue by id:', error)
+        throw error
+    }
+}
+
 export async function deleteVenue(id, authUser) {
     try {
         // only the admin who created the venue can delete theirs
