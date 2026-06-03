@@ -72,21 +72,29 @@ Resend (Email Notifications)
 
 ## Architecture
 
+The application uses Supabase Authentication with Google OAuth and a stateless JWT-based backend.
+
+1. Users sign in with Google through Supabase.
+2. After successful authentication, Supabase issues a JWT to the browser.
+3. The browser includes this JWT in API requests to the backend.
+4. Backend middleware verifies the JWT using Supabase.
+5. When email notifications are required, the backend uses Resend to send emails.
+6. Application data is stored in PostgreSQL (via Supabase).
+
+This architecture keeps authentication centralized in Supabase while the backend focuses on business logic and authorization.
+
 ```mermaid
 flowchart LR
-    User[User Browser]
+    B[Browser]
 
-    User --> FE[Next.js Frontend]
-    FE --> BE[Express.js Backend]
+    B -->|GET /venues<br/>POST /bookings<br/>Bearer JWT| API[Express Backend]
 
-    BE --> DB[(Supabase PostgreSQL)]
-    BE --> AUTH[Google OAuth]
-    BE --> EMAIL[Resend]
+    API -->|Verify JWT| SA[Supabase Auth]
 
-    AUTH --> BE
-    EMAIL --> User
+    API -->|Read / Write Data| DB[(Supabase PostgreSQL)]
+
+    API -->|Send Emails| R[Resend]
 ```
-
 ## Screenshots
 
 ### Login
@@ -169,6 +177,6 @@ npm run dev
 
 ## Author
 
--Sai Rithik
+-Sai Rithik Mangipudi
 
 -GitHub: https://github.com/RithikBruh
