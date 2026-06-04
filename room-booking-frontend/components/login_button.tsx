@@ -1,23 +1,16 @@
 "use client";
 
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+
 
 
 export default  function LoginButton() {
-  const router = useRouter();
-
   async function handleLogin() {
     const FrontendURL : string = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3001";
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo: FrontendURL + "/dashboard",
-
-      queryParams: {
-        access_type: "offline",
-        prompt: "consent",
-      },
     },
   })
 
