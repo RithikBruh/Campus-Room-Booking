@@ -5,20 +5,31 @@ const prisma = new PrismaClient();
 export async function checkBookingAvailability(email, venueId, date, givenstartTime, givenendTime) {
   try {
     return await prisma.bookings.findFirst({
-      where: {
+  where: {
+    venueId: parseInt(venueId),
+    date,
+    startTime: {
+      lt: givenendTime,
+    },
+    endTime: {
+      gt: givenstartTime,
+    },
+    OR: [
+      {
         email,
-        venueId: parseInt(venueId),
-        date,
-        startTime : {
-          lt: givenendTime
+        status: {
+          in: ["pending", "approved"],
         },
-        endTime: {
-          gt: givenstartTime,
-        },
-        status : "approved" 
       },
-      include: { venue: true },
-    });
+      {
+        status: "approved",
+      },
+    ],
+  },
+  include: {
+    venue: true,
+  },
+});
   } catch (error) {
     console.error("Error checking booking availability:", error);
     throw error;
